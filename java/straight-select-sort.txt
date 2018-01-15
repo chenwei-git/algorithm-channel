@@ -1,0 +1,41 @@
+-+[1] 直接选择排序
+-+[1.1] 基本思想
+第一次从R[0]~R[n-1]中选取最小值，与R[0]交换；
+第二次从R[1]~R[n-1]中选取最小值，与R[1]交换，....，
+第 i 次从R[i-1]~R[n-1]中选取最小值，与R[i-1]交换，.....，
+总共通过n-1次，得到一个按关键码从小到大排列的有序序列。
+-+[2] 代码
+    public static void main(String[] args) {
+        int[] array = new int[] { 3, 2, 5, 9, 2 };
+        // 对数组进行排序
+        helper1(array);
+        System.out.println(Arrays.toString(array));
+    }
+
+    private static void helper1(int[] array) {
+        // 选择要排序的数组范围
+        helper2(array, 0, array.length - 1);
+    }
+
+    private static void helper2(int[] array, int i, int j) {
+        // 范围不合理停止
+        if (i >= j) {
+            return;
+        }
+        // 一趟排序确认m到j的最值, 并与m上值进行交换
+        int temp = 0;
+        int index = 0;
+        for (int m = i; m < j; m++) {
+            index = m;
+            for (int n = m + 1; n <= j; n++) {
+                if (array[n] < array[index]) {
+                    index = n;
+                }
+            }
+            if (index != m) {
+                temp = array[m];
+                array[m] = array[index];
+                array[index] = temp;
+            }
+        }
+    }
