@@ -1,1 +1,143 @@
+-+[1] 堆排序
+-+[1.1] 基本思想
+-+[1.1.1] 将数组调整成大顶堆
+-+[1.1.2] 将堆顶元素与未排序序列的最后一个交换, 化归到有序序列
+-+[2] 代码
+-+[2.1] 非递归
+    public static void main(String[] args) {
+        int[] array = new int[] { 51, 46, 20, 18, 65, 97, 82, 30, 77, 50 };
+        // 对数组进行排序
+        helper1(array);
+        System.out.println(Arrays.toString(array));
+    }
 
+    private static void helper1(int[] array) {
+        if (array == null || array.length <= 1) {
+            return;
+        }
+        // 对指定范围的数组进行排序
+        helper2(array, 0, array.length - 1);
+    }
+
+    private static void helper2(int[] array, int i, int j) {
+        if (i >= j) {
+            return;
+        }
+        // 从最后一个非叶子节点开始进行堆有序
+        for (int k = (j - i + 1) / 2; k >= i; k--) {
+            helper3(array, k, j);
+        }
+
+        // 将堆顶元素交换到有序序列
+        int temp = 0;
+        for (; i < j;) {
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            j--;
+            // 重新进行堆有序
+            helper3(array, i, j);
+        }
+    }
+
+    private static void helper3(int[] array, int i, int j) {
+        int currIndex = i;
+        int nextIndex = currIndex;
+        int temp = array[currIndex];
+        for (;;) {
+            nextIndex = currIndex * 2 + 1;
+            if (nextIndex + 1 <= j && array[nextIndex + 1] > array[nextIndex]) {
+                nextIndex++;
+            }
+            if (nextIndex > j || array[nextIndex] <= temp) {
+                break;
+            }
+            array[currIndex] = array[nextIndex];
+            currIndex = nextIndex;
+        }
+        if (currIndex != i) {
+            array[currIndex] = temp;
+        }
+    }
+-+[2.2] 递归
+
+    public static void main(String[] args) {
+        int[] array = new int[] { 8, 7, 6, 5, 4, 3, 2, 1, 0, -1, -2, 9 };
+        // 对数组进行排序
+        helper1(array);
+        System.out.println(Arrays.toString(array));
+    }
+
+    private static void helper1(int[] array) {
+        // 对指定范围的数组进行排序
+        helper2(array, 0, array.length - 1);
+    }
+
+    private static void helper2(int[] array, int i, int j) {
+        if (i >= j) {
+            return;
+        }
+        // 将指定范围的数组构造成堆
+        helper3(array, i, j);
+        // 将堆顶元素交换到有序序列
+        int temp = 0;
+        for (; i < j;) {
+            temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
+            j--;
+            // 重新进行堆有序
+            helper4(array, i, j);
+        }
+    }
+
+    private static void helper3(int[] array, int i, int j) {
+        // 如果当前坐标大等于边界坐标, 说明节点为空或者是叶子节点, 不需要再进行构造
+        if (i >= j) {
+            return;
+        }
+        // 当前节点左节点坐标
+        int leftIndex = 2 * i + 1;
+        // 当前节点右节点坐标
+        int rightIndex = leftIndex + 1;
+        helper3(array, leftIndex, j);
+        helper3(array, rightIndex, j);
+
+        int maxIndex = i;
+        if (leftIndex <= j && array[leftIndex] > array[maxIndex]) {
+            maxIndex = leftIndex;
+        }
+        if (rightIndex <= j && array[rightIndex] > array[maxIndex]) {
+            maxIndex = rightIndex;
+        }
+        if (maxIndex != i) {
+            int temp = 0;
+            temp = array[i];
+            array[i] = array[maxIndex];
+            array[maxIndex] = temp;
+            helper4(array, maxIndex, j);
+        }
+    }
+
+    private static void helper4(int[] array, int i, int j) {
+        if (i >= j) {
+            return;
+        }
+        int leftIndex = 2 * i + 1;
+        int rightIndex = leftIndex + 1;
+        int maxIndex = i;
+        if (leftIndex <= j && array[leftIndex] > array[maxIndex]) {
+            maxIndex = leftIndex;
+        }
+        if (rightIndex <= j && array[rightIndex] > array[maxIndex]) {
+            maxIndex = rightIndex;
+        }
+        if (maxIndex != i) {
+            int temp = 0;
+            temp = array[i];
+            array[i] = array[maxIndex];
+            array[maxIndex] = temp;
+            // 需要将该节点重新调整成大顶堆
+            helper4(array, maxIndex, j);
+        }
+    }
