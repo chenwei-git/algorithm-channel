@@ -3,7 +3,7 @@
 每次从无序表中取出第一个元素，把它插入到有序表的合适位置，使有序表仍然有序，直到无序表内所有元素插入为止。
 -+[2] 代码
     public static void main(String[] args) {
-        int[] array = new int[] { 99, 99, 88, 51, 0, 46, 20, 18, 1, 65, 97, 82, 30, 77, 50 };
+        int[] array = new int[] { 9, 3, 7, 6, 1, 1, 2, 5 };
         // 对数组进行排序
         helper1(array);
         System.out.println(Arrays.toString(array));
@@ -38,9 +38,10 @@
     private static void helper3(int[] array, int i, int j) {
         for (int n = i + 1; n <= j; n++) {
             int temp = array[n];
-            int index = 0;
-            index = helper4(array, i, n - 1, temp);
-            if (index != n) {
+            int index = helper4(array, i, n - 1, temp);
+            // System.out.printf("i:%s, n-1:%s, temp:%s, index:%s ---- ", i, n - 1, temp, index);
+            // System.out.println(Arrays.toString(array));
+            if (index != -1) {
                 for (int k = n - 1; k >= index; k--) {
                     array[k + 1] = array[k];
                 }
