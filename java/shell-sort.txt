@@ -1,0 +1,41 @@
+-+[1] 堆排序
+-+[1.1] 基本思想
+-+[1.1.1] 先取一个正整数 d1<n，把所有序号相隔 d1 的数组元素放一组，组内进行直接插入排序，
+-+[1.1.2] 然后取 d2<d1，重复上述分组和直接插入排序操作；
+-+[1.1.2] 直至di = 1，即所有记录放进一个组中排序为止。
+-+[2] 代码
+    public static void main(String[] args) {
+        int[] array = new int[] { 5, 3, 6, 2, 1, 9, 4, 8, 7 };
+        helper1(array);
+        System.out.println(Arrays.toString(array));
+    }
+
+    private static void helper1(int[] array) {
+        if (array == null || array.length < 2) {
+            return;
+        }
+        helper2(array, 0, array.length - 1);
+    }
+
+    private static void helper2(int[] array, int i, int j) {
+        int h = 1;
+        while (h <= (j - i + 1) / 3) {
+            h = h * 3 + 1;
+        }
+        for (; h > 0; h = (h - 1) / 3) {
+            for (int m = 0; m <= h - 1; m++) {
+                for (int n = i + m + h; n <= j; n += h) {
+                    int target = array[n];
+                    // 插入排序
+                    int o = n - h;
+                    for (; o >= i + m; o -= h) {
+                        if (target >= array[o]) {
+                            break;
+                        }
+                        array[o + h] = array[o];
+                    }
+                    array[o + h] = target;
+                }
+            }
+        }
+    }
